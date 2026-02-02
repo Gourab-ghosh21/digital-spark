@@ -1,30 +1,40 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Shield, User, Lock, ArrowRight, AlertTriangle, Zap } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { Shield, User, Lock, ArrowRight, AlertTriangle, Zap, Mail } from 'lucide-react';
 import { CyberButton } from '@/components/ui/cyber-button';
 import { CyberInput } from '@/components/ui/cyber-input';
 import { CyberCard } from '@/components/ui/cyber-card';
 import MatrixRain from '@/components/MatrixRain';
 import HexagonPattern from '@/components/HexagonPattern';
+import { useAuth } from '@/contexts/AuthContext';
+
 const Login: React.FC = () => {
   const navigate = useNavigate();
+  const { signIn, user } = useAuth();
   const [formData, setFormData] = useState({
-    username: '',
+    email: '',
     password: ''
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (user) {
+      navigate('/dashboard');
+    }
+  }, [user, navigate]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
 
-    // Simulate authentication
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    if (formData.username && formData.password) {
-      navigate('/dashboard');
+    const { error } = await signIn(formData.email, formData.password);
+    
+    if (error) {
+      setError(error.message);
     } else {
-      setError('Invalid credentials. Access denied.');
+      navigate('/dashboard');
     }
     setLoading(false);
   };
@@ -75,15 +85,25 @@ const Login: React.FC = () => {
                 <p className="text-sm text-destructive font-mono">{error}</p>
               </div>}
 
-            <CyberInput label="Operator ID" placeholder="Enter your operator ID" icon={<User className="w-5 h-5" />} value={formData.username} onChange={e => setFormData({
-            ...formData,
-            username: e.target.value
-          })} required />
+            <CyberInput
+              label="Email Address"
+              type="email"
+              placeholder="Enter your email"
+              icon={<Mail className="w-5 h-5" />}
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              required
+            />
 
-            <CyberInput label="Access Code" type="password" placeholder="Enter your access code" icon={<Lock className="w-5 h-5" />} value={formData.password} onChange={e => setFormData({
-            ...formData,
-            password: e.target.value
-          })} required />
+            <CyberInput
+              label="Access Code"
+              type="password"
+              placeholder="Enter your password"
+              icon={<Lock className="w-5 h-5" />}
+              value={formData.password}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              required
+            />
 
             <CyberButton type="submit" variant="glow" size="lg" className="w-full" loading={loading}>
               <Zap className="w-5 h-5" />
@@ -94,6 +114,12 @@ const Login: React.FC = () => {
 
           {/* Footer info */}
           <div className="mt-6 pt-6 border-t border-border">
+            <p className="text-sm text-muted-foreground font-mono text-center mb-4">
+              Don't have an account?{' '}
+              <Link to="/signup" className="text-primary hover:text-primary/80 transition-colors">
+                Register here
+              </Link>
+            </p>
             <div className="text-xs font-mono text-muted-foreground flex-row flex items-center justify-between">
               <span>v2.4.1</span>
               <span className="flex items-center gap-2">

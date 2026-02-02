@@ -1,5 +1,5 @@
 import React from 'react';
-import { Shield, AlertTriangle, Users, Clock, MessageSquare, Zap, LogOut, Activity } from 'lucide-react';
+import { Shield, AlertTriangle, Users, Clock, MessageSquare, Zap, LogOut, Activity, User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import StatsCard from '@/components/dashboard/StatsCard';
 import ActiveSessions from '@/components/dashboard/ActiveSessions';
@@ -8,12 +8,15 @@ import ConversationViewer from '@/components/dashboard/ConversationViewer';
 import APIStatus from '@/components/dashboard/APIStatus';
 import { CyberButton } from '@/components/ui/cyber-button';
 import HexagonPattern from '@/components/HexagonPattern';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
+  const { user, signOut } = useAuth();
 
-  const handleLogout = () => {
-    navigate('/');
+  const handleLogout = async () => {
+    await signOut();
+    navigate('/login');
   };
 
   return (
@@ -50,6 +53,15 @@ const Dashboard: React.FC = () => {
                 </span>
                 <span className="text-sm font-mono text-success">System Active</span>
               </div>
+              
+              {user && (
+                <div className="hidden md:flex items-center gap-2 px-3 py-2 rounded-lg bg-muted/50 border border-border">
+                  <User className="w-4 h-4 text-muted-foreground" />
+                  <span className="text-sm font-mono text-muted-foreground truncate max-w-[150px]">
+                    {user.email}
+                  </span>
+                </div>
+              )}
               
               <CyberButton variant="ghost" size="sm" onClick={handleLogout}>
                 <LogOut className="w-4 h-4" />
