@@ -14,7 +14,142 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      extracted_intelligence: {
+        Row: {
+          created_at: string
+          id: string
+          session_id: string | null
+          type: string
+          value: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          session_id?: string | null
+          type: string
+          value: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          session_id?: string | null
+          type?: string
+          value?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "extracted_intelligence_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "honeypot_sessions"
+            referencedColumns: ["session_id"]
+          },
+        ]
+      }
+      honeypot_sessions: {
+        Row: {
+          channel: string | null
+          created_at: string
+          duration_seconds: number
+          id: string
+          messages_count: number
+          scam_detected: boolean | null
+          scam_type: string | null
+          session_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          channel?: string | null
+          created_at?: string
+          duration_seconds?: number
+          id?: string
+          messages_count?: number
+          scam_detected?: boolean | null
+          scam_type?: string | null
+          session_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          channel?: string | null
+          created_at?: string
+          duration_seconds?: number
+          id?: string
+          messages_count?: number
+          scam_detected?: boolean | null
+          scam_type?: string | null
+          session_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      messages: {
+        Row: {
+          flagged: boolean | null
+          id: string
+          sender: string
+          session_id: string | null
+          text: string
+          timestamp: string
+        }
+        Insert: {
+          flagged?: boolean | null
+          id?: string
+          sender: string
+          session_id?: string | null
+          text: string
+          timestamp?: string
+        }
+        Update: {
+          flagged?: boolean | null
+          id?: string
+          sender?: string
+          session_id?: string | null
+          text?: string
+          timestamp?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "honeypot_sessions"
+            referencedColumns: ["session_id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
