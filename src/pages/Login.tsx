@@ -6,21 +6,21 @@ import { CyberInput } from '@/components/ui/cyber-input';
 import { CyberCard } from '@/components/ui/cyber-card';
 import MatrixRain from '@/components/MatrixRain';
 import HexagonPattern from '@/components/HexagonPattern';
-
 const Login: React.FC = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({ username: '', password: '' });
+  const [formData, setFormData] = useState({
+    username: '',
+    password: ''
+  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
-    
+
     // Simulate authentication
     await new Promise(resolve => setTimeout(resolve, 1500));
-    
     if (formData.username && formData.password) {
       navigate('/dashboard');
     } else {
@@ -28,9 +28,7 @@ const Login: React.FC = () => {
     }
     setLoading(false);
   };
-
-  return (
-    <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background">
+  return <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background">
       {/* Background Effects */}
       <MatrixRain opacity={0.03} />
       <HexagonPattern />
@@ -72,39 +70,22 @@ const Login: React.FC = () => {
               </span>
             </div>
 
-            {error && (
-              <div className="flex items-center gap-3 p-4 bg-destructive/10 border border-destructive/30 rounded-lg">
+            {error && <div className="flex items-center gap-3 p-4 bg-destructive/10 border border-destructive/30 rounded-lg">
                 <AlertTriangle className="w-5 h-5 text-destructive flex-shrink-0" />
                 <p className="text-sm text-destructive font-mono">{error}</p>
-              </div>
-            )}
+              </div>}
 
-            <CyberInput
-              label="Operator ID"
-              placeholder="Enter your operator ID"
-              icon={<User className="w-5 h-5" />}
-              value={formData.username}
-              onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-              required
-            />
+            <CyberInput label="Operator ID" placeholder="Enter your operator ID" icon={<User className="w-5 h-5" />} value={formData.username} onChange={e => setFormData({
+            ...formData,
+            username: e.target.value
+          })} required />
 
-            <CyberInput
-              label="Access Code"
-              type="password"
-              placeholder="Enter your access code"
-              icon={<Lock className="w-5 h-5" />}
-              value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-              required
-            />
+            <CyberInput label="Access Code" type="password" placeholder="Enter your access code" icon={<Lock className="w-5 h-5" />} value={formData.password} onChange={e => setFormData({
+            ...formData,
+            password: e.target.value
+          })} required />
 
-            <CyberButton
-              type="submit"
-              variant="glow"
-              size="lg"
-              className="w-full"
-              loading={loading}
-            >
+            <CyberButton type="submit" variant="glow" size="lg" className="w-full" loading={loading}>
               <Zap className="w-5 h-5" />
               Initialize Session
               <ArrowRight className="w-5 h-5" />
@@ -113,7 +94,7 @@ const Login: React.FC = () => {
 
           {/* Footer info */}
           <div className="mt-6 pt-6 border-t border-border">
-            <div className="flex items-center justify-between text-xs font-mono text-muted-foreground">
+            <div className="text-xs font-mono text-muted-foreground flex-row flex items-center justify-between">
               <span>v2.4.1</span>
               <span className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
@@ -134,8 +115,6 @@ const Login: React.FC = () => {
       <div className="absolute bottom-10 right-10 w-48 h-48 border border-accent/10 rounded-full animate-pulse opacity-20" />
       <div className="absolute top-1/4 right-20 w-2 h-2 bg-primary rounded-full animate-ping opacity-50" />
       <div className="absolute bottom-1/3 left-20 w-2 h-2 bg-accent rounded-full animate-ping opacity-50" />
-    </div>
-  );
+    </div>;
 };
-
 export default Login;
